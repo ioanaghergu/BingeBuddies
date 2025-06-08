@@ -1,21 +1,22 @@
 package org.market.bingebuddies.domain;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import org.market.bingebuddies.domain.security.User;
 
 @Entity
-public class ScreeningEvent {
+public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private LocalDateTime date;
+    private Integer rating;
+
+    private String comment;
 
     @ManyToOne
-    @JoinColumn(name = "CLUB_ID")
-    private MovieClub movieClub;
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "MOVIE_ID")
