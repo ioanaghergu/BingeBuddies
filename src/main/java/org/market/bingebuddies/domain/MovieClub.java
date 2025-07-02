@@ -1,6 +1,9 @@
 package org.market.bingebuddies.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Singular;
 import org.market.bingebuddies.domain.security.User;
 
@@ -9,11 +12,16 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MovieClub {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Long adminId;
 
     private String name;
 

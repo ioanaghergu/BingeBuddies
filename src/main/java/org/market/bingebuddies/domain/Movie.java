@@ -15,7 +15,7 @@ public class Movie {
 
     private String title;
     private String genre;
-    private String ReleaseYear;
+    private String releaseYear;
     private Double avgRating;
 
     @OneToMany(mappedBy = "movie")
