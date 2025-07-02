@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <!-- Reusing the same styles as the register page for a consistent look and feel -->
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background: #fff;
+            padding: 2rem 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #1c1e21;
+            margin-bottom: 1.5rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4b4f56;
+        }
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #dddfe2;
+            border-radius: 6px;
+            box-sizing: border-box; /* Important for padding */
+        }
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            border: none;
+            border-radius: 6px;
+            background-color: #1877f2;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .btn:hover {
+            background-color: #166fe5;
+        }
+        /* Alert styles for different message types */
+        .alert {
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+        }
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+        .alert-info {
+            color: #31708f;
+            background-color: #d9edf7;
+            border-color: #bce8f1;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+        .register-link a {
+            color: #1877f2;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Welcome Back! 👋</h1>
+
+    <!-- Login Error Message -->
+    <!-- Displayed by Spring Security if login fails (e.g., bad credentials) -->
+    <div th:if="${param.error}" class="alert alert-danger">
+        Invalid username or password.
+    </div>
+
+    <!-- Successful Logout Message -->
+    <!-- Displayed by Spring Security after a successful logout -->
+    <div th:if="${param.logout}" class="alert alert-info">
+        You have been logged out.
+    </div>
+
+    <!-- Successful Registration Message -->
+    <!-- Displayed when redirected from the registration page with the '?created' parameter -->
+    <div th:if="${param.created}" class="alert alert-success">
+        Your account has been created successfully! Please log in.
+    </div>
+
+    <!-- Login Form -->
+    <!-- Spring Security's default login processing URL is /login -->
+    <form th:action="@{/perform_login}" method="post">
+
+        <!-- Username Input -->
+        <!-- The 'name' attribute must be 'username' for Spring Security to pick it up by default -->
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" class="form-control" required autofocus="autofocus">
+        </div>
+
+        <!-- Password Input -->
+        <!-- The 'name' attribute must be 'password' for Spring Security to pick it up by default -->
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="btn">Login</button>
+    </form>
+
+    <!-- Link to Registration Page -->
+    <div class="register-link">
+        <p>Don't have an account? <a th:href="@{/register}">Sign Up</a></p>
+    </div>
+
+</div>
+
+</body>
+</html>

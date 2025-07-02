@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<!-- Add layout and security namespaces -->
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Binge Buddies</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+
+<header class="bg-white shadow-md">
+    <nav class="container mx-auto px-6 py-3">
+        <div class="flex justify-between items-center">
+            <a th:href="@{/clubs}" class="text-2xl font-bold text-gray-800">BingeBuddies</a>
+
+            <div class="hidden md:flex items-center space-x-4">
+                <a th:href="@{/clubs}" class="text-gray-600 hover:text-blue-600">Clubs</a>
+
+                <a th:href="@{/movies}" class="text-gray-600 hover:text-blue-600">Movies</a>
+
+                <a th:href="@{/movies/new}" sec:authorize="hasRole('ADMIN')"
+                   class="text-gray-600 hover:text-blue-600">Add Movie</a>
+            </div>
+
+            <div class="flex items-center">
+                <a th:href="@{/login}" sec:authorize="!isAuthenticated()"
+                   class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300">
+                    Login
+                </a>
+
+                <div sec:authorize="isAuthenticated()" class="flex items-center">
+                    <span class="text-gray-700 mr-4">Welcome, <strong sec:authentication="name">User</strong></span>
+                    <form th:action="@{/logout}" method="post" class="inline">
+                        <button type="submit"
+                                class="bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div layout:fragment="content">
+        <p> </p>
+    </div>
+</main>
+
+</body>
+</html>

@@ -39,8 +39,6 @@ public class SecurityJPAConfig {
                                 "/resources/**",
                                 "/login",
                                 "/",
-                                "/clubs",
-                                "/**",
                                 "/clubs/**",
                                 "/register",
                                 "/movies/**"

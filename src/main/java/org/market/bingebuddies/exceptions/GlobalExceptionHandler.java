@@ -29,4 +29,14 @@ public class GlobalExceptionHandler {
 
         return mav;
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MovieClubNotFoundException.class)
+    public ModelAndView handleMovieClubNotFoundException(Exception e) {
+        ModelAndView mav = new ModelAndView();
+        mav.getModel().put("exception", e);
+        mav.setViewName("MovieClubNotFound");
+
+        return mav;
+    }
 }

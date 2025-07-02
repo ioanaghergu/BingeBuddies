@@ -8,6 +8,8 @@ import org.market.bingebuddies.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
@@ -43,5 +45,27 @@ public class MovieClubController {
         }
         model.addAttribute("clubs", clubs);
         return "home";
+    }
+
+    @GetMapping("/clubs/{id}")
+    public String clubDetails(@PathVariable Long id, Model model) {
+        Optional<MovieClubDTO> club = movieClubService.getMovieClubById(id);
+        if(club.isPresent()) {
+            MovieClubDTO movieClub = club.get();
+            model.addAttribute("movieClub", movieClub);
+
+            String adminUsername = "N/A";
+
+            if(movieClub.getAdminId() != null) {
+                User admin = userService.findById(movieClub.getAdminId());
+                adminUsername = admin.getUsername();
+            }
+
+            model.addAttribute("adminUsername", adminUsername);
+            return "clubDetails";
+        }
+        else {
+            return "redirect:/";
+        }
     }
 }

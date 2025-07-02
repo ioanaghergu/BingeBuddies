@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${movieClub.name} + ' Details'">Movie Club Details</title>
+    <!-- Using Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<div layout:fragment="content" class="container mx-auto px-4 py-8">
+
+    <div th:if="${movieClub != null}" class="bg-white rounded-xl shadow-lg p-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4" th:text="${movieClub.name}">Club Name</h1>
+        <p class="text-gray-700 text-lg mb-6" th:text="${movieClub.description}">Club description goes here.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div>
+                <p class="text-gray-700 text-sm font-semibold">Admin:</p>
+                <p class="text-gray-800" th:text="${adminUsername}"></p>
+            </div>
+            <div>
+                <p class="text-gray-700 text-sm font-semibold">Members:</p>
+                <p class="text-gray-800">
+                    <span th:if="${movieClub.settings != null}">
+                        <span th:text="${movieClub.members != null ? movieClub.members.size() : 0}"></span> / <span th:text="${movieClub.settings.maxMembers ?: 'Unlimited'}"></span>
+                    </span>
+                    <span th:if="${movieClub.settings == null}">N/A</span>
+                </p>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-semibold text-gray-800 mb-3">Club Members</h2>
+        <div th:if="${movieClub.members != null and !movieClub.members.isEmpty()}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+            <div th:each="member : ${movieClub.members}" class="bg-gray-100 p-4 rounded-lg shadow-sm">
+                <p class="font-medium text-gray-800" th:text="${member.username}"></p>
+                <!-- You can add more member details here if available in the User object -->
+            </div>
+        </div>
+        <div th:if="${movieClub.members == null or movieClub.members.isEmpty()}" class="text-gray-600 mb-8">
+            No members yet.
+        </div>
+
+        <h2 class="text-2xl font-semibold text-gray-800 mb-3">Upcoming Screening Events</h2>
+        <div class="text-gray-600 mb-8">
+            (No screening events yet.)
+        </div>
+
+        <a th:href="@{/}" class="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 mt-4">
+            Back to Clubs
+        </a>
+    </div>
+
+    <div th:if="${movieClub == null}" class="text-center bg-white p-10 rounded-xl shadow-md">
+        <h2 class="text-2xl font-semibold text-gray-700 mb-2">Club Not Found</h2>
+        <p class="text-gray-500">
+            The movie club you are looking for does not exist or is not accessible.
+        </p>
+        <a th:href="@{/}" class="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 mt-4">
+            Back to Clubs
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>
