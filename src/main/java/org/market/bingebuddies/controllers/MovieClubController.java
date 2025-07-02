@@ -1,7 +1,10 @@
 package org.market.bingebuddies.controllers;
 
+import jakarta.validation.Valid;
 import org.market.bingebuddies.domain.security.User;
+import org.market.bingebuddies.dtos.ClubSettingsDTO;
 import org.market.bingebuddies.dtos.MovieClubDTO;
+import org.market.bingebuddies.exceptions.ClubAlreadyExistsException;
 import org.market.bingebuddies.services.MovieClubService;
 import org.market.bingebuddies.services.UserService;
 import org.springframework.security.core.Authentication;
@@ -9,10 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
@@ -113,5 +114,50 @@ public class MovieClubController {
         }
 
         return "redirect:/clubs/" + id;
+    }
+
+    @GetMapping("/clubs/new")
+    public String showCreateClubForm(Model model, @AuthenticationPrincipal UserDetails currentUser) {
+        if(currentUser == null) {
+            return "redirect:/login";
+        }
+
+        MovieClubDTO movieClub = new MovieClubDTO();
+        movieClub.setSettings(new ClubSettingsDTO());
+        model.addAttribute("movieClub", movieClub);
+        return "newClub";
+    }
+
+    @PostMapping("/clubs/new")
+    public String createClub(@Valid @ModelAttribute("movieClub") MovieClubDTO movieClubDTO, BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails currentUser) {
+        if(currentUser == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You must be logged in to create a club.");
+            return "redirect:/login";
+        }
+
+        if(bindingResult.hasErrors()) {
+            return "newClub";
+        }
+
+        User admin = userService.findByUsername(currentUser.getUsername());
+        if(admin == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Could not find your user account.");
+            return "redirect:/clubs/new";
+        }
+
+        try{
+            movieClubService.createMovieClub(movieClubDTO, admin.getId());
+            redirectAttributes.addFlashAttribute("successMessage", "Successfully created club!");
+            return "redirect:/clubs";
+        }
+        catch (ClubAlreadyExistsException e) {
+            bindingResult.rejectValue("name", "club.name.exists", e.getMessage());
+            return "newClub";
+        }
+        catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error creating club: " + e.getMessage());
+            return "redirect:/clubs/new";
+
+        }
     }
 }

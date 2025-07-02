@@ -8,7 +8,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${movieClub.name} + ' Details'">Movie Club Details</title>
-    <!-- Using Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <style>
@@ -57,10 +56,6 @@
             <div th:if="${#authentication.name == adminUsername}" class="text-blue-600 font-semibold text-lg">
                 You are the admin of this club.
             </div>
-            <!-- Show Join button ONLY if:
-                 1. Not already a member
-                 2. Not the admin
-                 3. Club is not full (check maxMembers and current members count) -->
             <div th:if="${!isMember and #authentication.name != adminUsername}">
                 <div th:if="${movieClub.settings != null and movieClub.settings.maxMembers != null and movieClub.members.size() >= movieClub.settings.maxMembers}" class="text-red-600 font-semibold text-lg">
                     This club is full.
@@ -76,7 +71,6 @@
         <div sec:authorize="!isAuthenticated()" class="text-gray-600">
             <a th:href="@{/login}" class="text-blue-600 hover:underline">Log in</a> to join this club.
         </div>
-        <!-- End Join Club Button Logic -->
 
         <h2 class="text-2xl font-semibold text-gray-800 mb-3 mt-8">Club Members</h2>
         <div th:if="${movieClub.members != null and !movieClub.members.isEmpty()}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">

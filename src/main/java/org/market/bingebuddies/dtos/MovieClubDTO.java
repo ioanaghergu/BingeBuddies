@@ -9,6 +9,7 @@ import org.market.bingebuddies.domain.ScreeningEvent;
 import org.market.bingebuddies.domain.Watchlist;
 import org.market.bingebuddies.domain.security.User;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class MovieClubDTO {
     private String name;
     private String description;
     private ClubSettingsDTO settings;
-    private Set<UserDTO> members;
+    private Set<UserDTO> members = new HashSet<>();
     private List<Watchlist> watchlists;
     private List<ScreeningEvent> events;
 }

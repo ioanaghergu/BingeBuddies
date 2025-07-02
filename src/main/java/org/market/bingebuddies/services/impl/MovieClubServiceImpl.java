@@ -1,10 +1,13 @@
 package org.market.bingebuddies.services.impl;
 
+import org.market.bingebuddies.domain.ClubSettings;
 import org.market.bingebuddies.domain.MovieClub;
 import org.market.bingebuddies.domain.security.User;
+import org.market.bingebuddies.dtos.ClubSettingsDTO;
 import org.market.bingebuddies.dtos.MovieClubDTO;
 import org.market.bingebuddies.exceptions.ClubAlreadyExistsException;
 import org.market.bingebuddies.exceptions.MovieClubNotFoundException;
+import org.market.bingebuddies.mappers.ClubSettingsMapper;
 import org.market.bingebuddies.mappers.MovieClubMapper;
 import org.market.bingebuddies.repositories.MovieClubRepository;
 import org.market.bingebuddies.repositories.security.UserRepository;
@@ -22,11 +25,13 @@ public class MovieClubServiceImpl implements MovieClubService {
     private final MovieClubRepository movieClubRepository;
     private final MovieClubMapper movieClubMapper;
     private final UserRepository userRepository;
+    private final ClubSettingsMapper clubSettingsMapper;
 
-    public MovieClubServiceImpl(MovieClubRepository movieClubRepository, MovieClubMapper movieClubMapper, UserRepository userRepository) {
+    public MovieClubServiceImpl(MovieClubRepository movieClubRepository, MovieClubMapper movieClubMapper, UserRepository userRepository, ClubSettingsMapper clubSettingsMapper) {
         this.movieClubRepository = movieClubRepository;
         this.movieClubMapper = movieClubMapper;
         this.userRepository = userRepository;
+        this.clubSettingsMapper = clubSettingsMapper;
     }
 
     @Override
@@ -86,5 +91,40 @@ public class MovieClubServiceImpl implements MovieClubService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    @Transactional
+    public MovieClubDTO createMovieClub(MovieClubDTO movieClubDTO, Long adminId) {
+        Optional<MovieClub> existingClub = movieClubRepository.findByNameAndAdminId(movieClubDTO.getName(), adminId);
+
+        if(existingClub.isPresent()) {
+            throw new ClubAlreadyExistsException("Club with name " + movieClubDTO.getName() + " already exists");
+        }
+
+        MovieClub movieClub = movieClubMapper.toMovieClub(movieClubDTO);
+        movieClub.setAdminId(adminId);
+
+        ClubSettings settings = clubSettingsMapper.toClubSettings(movieClubDTO.getSettings());
+        movieClub.setSettings(settings);
+        settings.setMovieClub(movieClub);
+
+        Optional<User> adminOptional = userRepository.findById(adminId);
+        if(adminOptional.isPresent()) {
+            User admin = adminOptional.get();
+            movieClub.getMembers().add(admin);
+            admin.getClubs().add(movieClub);
+            userRepository.save(admin);
+        }
+        else {
+            System.out.println("Admin not found");
+        }
+
+        MovieClub savedClub = movieClubRepository.save(movieClub);
+
+        MovieClubDTO savedDTO = movieClubMapper.toMovieClubDTO(savedClub);
+
+        return savedDTO;
+
     }
 }

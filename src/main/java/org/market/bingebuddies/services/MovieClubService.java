@@ -11,4 +11,5 @@ public interface MovieClubService {
     Optional<MovieClubDTO> getMovieClubById(Long id);
     Boolean joinMovieClub(Long movieClubId, Long userId);
     MovieClub save(MovieClub movieClub);
+    MovieClubDTO createMovieClub(MovieClubDTO movieClubDTO, Long adminId);
 }
