@@ -39,4 +39,14 @@ public class GlobalExceptionHandler {
 
         return mav;
     }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ClubAlreadyExistsException.class)
+    public ModelAndView handleClubAlreadyExistsException(Exception e) {
+        ModelAndView mav = new ModelAndView();
+        mav.getModel().put("exception", e);
+        mav.setViewName("ClubAlreadyExists");
+
+        return mav;
+    }
 }

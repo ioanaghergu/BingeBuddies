@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: org.market.bingebuddies.BingeBuddiesApplicationTests
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.956 s -- in org.market.bingebuddies.BingeBuddiesApplicationTests
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 8.354 s -- in org.market.bingebuddies.BingeBuddiesApplicationTests

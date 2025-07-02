@@ -1,12 +1,16 @@
 package org.market.bingebuddies.services.impl;
 
 import org.market.bingebuddies.domain.MovieClub;
+import org.market.bingebuddies.domain.security.User;
 import org.market.bingebuddies.dtos.MovieClubDTO;
+import org.market.bingebuddies.exceptions.ClubAlreadyExistsException;
 import org.market.bingebuddies.exceptions.MovieClubNotFoundException;
 import org.market.bingebuddies.mappers.MovieClubMapper;
 import org.market.bingebuddies.repositories.MovieClubRepository;
+import org.market.bingebuddies.repositories.security.UserRepository;
 import org.market.bingebuddies.services.MovieClubService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +21,12 @@ public class MovieClubServiceImpl implements MovieClubService {
 
     private final MovieClubRepository movieClubRepository;
     private final MovieClubMapper movieClubMapper;
+    private final UserRepository userRepository;
 
-    public MovieClubServiceImpl(MovieClubRepository movieClubRepository, MovieClubMapper movieClubMapper) {
+    public MovieClubServiceImpl(MovieClubRepository movieClubRepository, MovieClubMapper movieClubMapper, UserRepository userRepository) {
         this.movieClubRepository = movieClubRepository;
         this.movieClubMapper = movieClubMapper;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -39,5 +45,46 @@ public class MovieClubServiceImpl implements MovieClubService {
         }
 
         return Optional.of(movieClubMapper.toMovieClubDTO(movieClub.get()));
+    }
+
+    @Override
+    public MovieClub save(MovieClub movieClub) {
+        Optional<MovieClub> club = movieClubRepository.findByNameAndAdminId(movieClub.getName(), movieClub.getAdminId());
+        if(club.isPresent()) {
+            throw new ClubAlreadyExistsException("Club with name " + movieClub.getName() + " already exists");
+        }
+        return movieClubRepository.save(movieClub);
+    }
+
+    @Override
+    @Transactional
+    public Boolean joinMovieClub(Long movieClubId, Long userId) {
+
+        Optional<MovieClub> clubOptional = movieClubRepository.findById(movieClubId);
+        Optional<User> userOptional = userRepository.findById(userId);
+
+        if(clubOptional.isPresent() && userOptional.isPresent()) {
+            MovieClub club = clubOptional.get();
+            User user = userOptional.get();
+
+            //User is already a member of the club
+            if(club.getMembers().contains(user)) {
+                return false;
+            }
+
+            //Club is full
+            if(club.getSettings() != null && club.getSettings().getMaxMembers() != null) {
+                if(club.getMembers().size() == club.getSettings().getMaxMembers()) {
+                    return false;
+                }
+            }
+
+            club.getMembers().add(user);
+            user.getClubs().add(club);
+            movieClubRepository.save(club);
+            userRepository.save(user);
+            return true;
+        }
+        return false;
     }
 }

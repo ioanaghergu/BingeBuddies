@@ -2,6 +2,7 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
@@ -19,6 +20,14 @@
 <body class="bg-gray-50 text-gray-800">
 
 <div layout:fragment="content" class="container mx-auto px-4 py-8">
+
+    <!-- Flash messages for success/error -->
+    <div th:if="${successMessage}" class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline" th:text="${successMessage}"></span>
+    </div>
+    <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+        <span class="block sm:inline" th:text="${errorMessage}"></span>
+    </div>
 
     <div th:if="${movieClub != null}" class="bg-white rounded-xl shadow-lg p-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-4" th:text="${movieClub.name}">Club Name</h1>
@@ -40,11 +49,39 @@
             </div>
         </div>
 
-        <h2 class="text-2xl font-semibold text-gray-800 mb-3">Club Members</h2>
+
+        <div sec:authorize="isAuthenticated()">
+            <div th:if="${isMember}" class="text-green-600 font-semibold text-lg">
+                You are a member of this club!
+            </div>
+            <div th:if="${#authentication.name == adminUsername}" class="text-blue-600 font-semibold text-lg">
+                You are the admin of this club.
+            </div>
+            <!-- Show Join button ONLY if:
+                 1. Not already a member
+                 2. Not the admin
+                 3. Club is not full (check maxMembers and current members count) -->
+            <div th:if="${!isMember and #authentication.name != adminUsername}">
+                <div th:if="${movieClub.settings != null and movieClub.settings.maxMembers != null and movieClub.members.size() >= movieClub.settings.maxMembers}" class="text-red-600 font-semibold text-lg">
+                    This club is full.
+                </div>
+                <form th:action="@{/clubs/{id}/join(id=${movieClub.id})}" method="post"
+                      th:unless="${movieClub.settings != null and movieClub.settings.maxMembers != null and movieClub.members.size() >= movieClub.settings.maxMembers}">
+                    <button type="submit" class="bg-green-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-green-700 transition-colors duration-300">
+                        Join Club
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div sec:authorize="!isAuthenticated()" class="text-gray-600">
+            <a th:href="@{/login}" class="text-blue-600 hover:underline">Log in</a> to join this club.
+        </div>
+        <!-- End Join Club Button Logic -->
+
+        <h2 class="text-2xl font-semibold text-gray-800 mb-3 mt-8">Club Members</h2>
         <div th:if="${movieClub.members != null and !movieClub.members.isEmpty()}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
             <div th:each="member : ${movieClub.members}" class="bg-gray-100 p-4 rounded-lg shadow-sm">
                 <p class="font-medium text-gray-800" th:text="${member.username}"></p>
-                <!-- You can add more member details here if available in the User object -->
             </div>
         </div>
         <div th:if="${movieClub.members == null or movieClub.members.isEmpty()}" class="text-gray-600 mb-8">

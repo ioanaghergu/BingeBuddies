@@ -1,10 +1,7 @@
 package org.market.bingebuddies.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Singular;
+import lombok.*;
 import org.market.bingebuddies.domain.security.User;
 
 import java.util.HashSet;
@@ -15,10 +12,12 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class MovieClub {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     private Long adminId;
@@ -29,6 +28,7 @@ public class MovieClub {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SETTINGS_ID", referencedColumnName = "ID")
+    @EqualsAndHashCode.Exclude
     private ClubSettings settings;
 
     @Singular
@@ -36,11 +36,14 @@ public class MovieClub {
     @JoinTable(name = "club_members",
             joinColumns = { @JoinColumn(name = "CLUB_ID", referencedColumnName = "ID")},
             inverseJoinColumns = { @JoinColumn(name = "USER_ID", referencedColumnName = "ID")})
+    @EqualsAndHashCode.Exclude
     private Set<User> members = new HashSet<User>();
 
     @OneToMany(mappedBy = "movieClub", cascade = CascadeType.ALL, orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
     private List<Watchlist> watchlists;
 
     @OneToMany(mappedBy = "movieClub", cascade = CascadeType.ALL, orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
     private List<ScreeningEvent> events;
 }

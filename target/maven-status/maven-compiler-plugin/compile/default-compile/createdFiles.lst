@@ -18,10 +18,12 @@ org\market\bingebuddies\repositories\security\UserRepository.class
 org\market\bingebuddies\services\impl\AuthorityServiceImpl.class
 org\market\bingebuddies\repositories\MovieClubRepository.class
 org\market\bingebuddies\config\SecurityJPAConfig.class
+org\market\bingebuddies\exceptions\ClubAlreadyExistsException.class
 org\market\bingebuddies\services\MovieClubService.class
 org\market\bingebuddies\domain\Movie.class
 org\market\bingebuddies\domain\security\Authority$AuthorityBuilder.class
 org\market\bingebuddies\controllers\AuthController.class
+org\market\bingebuddies\exceptions\MovieClubNotFoundException.class
 org\market\bingebuddies\domain\ClubSettings.class
 org\market\bingebuddies\domain\Review.class
 org\market\bingebuddies\dtos\MovieDTO.class

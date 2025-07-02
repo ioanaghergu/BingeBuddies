@@ -11,12 +11,16 @@ import java.util.Set;
 
 @Entity
 @Builder
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
     private String username;
     private String password;
@@ -29,9 +33,11 @@ public class User {
     private Set<Authority> authorities;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<Review> reviews;
 
     @ManyToMany(mappedBy = "members")
+    @ToString.Exclude
     private Set<MovieClub> clubs = new HashSet<>();
 
     @Builder.Default
