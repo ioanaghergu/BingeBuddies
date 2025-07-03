@@ -14,6 +14,7 @@ C:\Users\ioana\OneDrive - unibuc.ro\Desktop\Proiect AWBD 2\BingeBuddies\src\main
 C:\Users\ioana\OneDrive - unibuc.ro\Desktop\Proiect AWBD 2\BingeBuddies\src\main\java\org\market\bingebuddies\services\UserService.java
 C:\Users\ioana\OneDrive - unibuc.ro\Desktop\Proiect AWBD 2\BingeBuddies\src\main\java\org\market\bingebuddies\domain\ScreeningEvent.java
 C:\Users\ioana\OneDrive - unibuc.ro\Desktop\Proiect AWBD 2\BingeBuddies\src\main\java\org\market\bingebuddies\repositories\MovieClubRepository.java
+C:\Users\ioana\OneDrive - unibuc.ro\Desktop\Proiect AWBD 2\BingeBuddies\src\main\java\org\market\bingebuddies\exceptions\PermissionDeniedException.java
 C:\Users\ioana\OneDrive - unibuc.ro\Desktop\Proiect AWBD 2\BingeBuddies\src\main\java\org\market\bingebuddies\services\MovieClubService.java
 C:\Users\ioana\OneDrive - unibuc.ro\Desktop\Proiect AWBD 2\BingeBuddies\src\main\java\org\market\bingebuddies\exceptions\MovieClubNotFoundException.java
 C:\Users\ioana\OneDrive - unibuc.ro\Desktop\Proiect AWBD 2\BingeBuddies\src\main\java\org\market\bingebuddies\repositories\security\UserRepository.java

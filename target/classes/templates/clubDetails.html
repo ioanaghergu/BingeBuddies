@@ -49,18 +49,15 @@
             </div>
         </div>
 
-        <!-- Join Club Button Logic -->
-        <div sec:authorize="isAuthenticated()">
+        <!-- Action Buttons (Join, Edit, Delete) -->
+        <div sec:authorize="isAuthenticated()" class="flex flex-wrap gap-4 mb-8">
+            <!-- Join Club Button Logic -->
             <div th:if="${isMember}" class="text-green-600 font-semibold text-lg">
                 You are a member of this club!
             </div>
             <div th:if="${#authentication.name == adminUsername}" class="text-blue-600 font-semibold text-lg">
                 You are the admin of this club.
             </div>
-            <!-- Show Join button ONLY if:
-                 1. Not already a member
-                 2. Not the admin
-                 3. Club is not full (check maxMembers and current members count) -->
             <div th:if="${!isMember and #authentication.name != adminUsername}">
                 <div th:if="${movieClub.settings != null and movieClub.settings.maxMembers != null and movieClub.members.size() >= movieClub.settings.maxMembers}" class="text-red-600 font-semibold text-lg">
                     This club is full.
@@ -72,11 +69,25 @@
                     </button>
                 </form>
             </div>
+
+            <!-- Edit Club Button (Visible to any member) -->
+            <a th:if="${isMember}" th:href="@{/clubs/{id}/edit(id=${movieClub.id})}"
+               class="inline-block bg-yellow-500 text-white font-semibold px-6 py-3 rounded-lg hover:bg-yellow-600 transition-colors duration-300">
+                Edit Club
+            </a>
+
+            <!-- Delete Club Button (Visible only to the admin) -->
+            <form th:if="${#authentication.name == adminUsername}" th:action="@{/clubs/{id}/delete(id=${movieClub.id})}" method="post"
+                  onsubmit="return confirm('Are you sure you want to delete this club? This action cannot be undone.');">
+                <button type="submit" class="bg-red-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-red-700 transition-colors duration-300">
+                    Delete Club
+                </button>
+            </form>
         </div>
-        <div sec:authorize="!isAuthenticated()" class="text-gray-600">
-            <a th:href="@{/login}" class="text-blue-600 hover:underline">Log in</a> to join this club.
+        <div sec:authorize="!isAuthenticated()" class="text-gray-600 mb-8">
+            <a th:href="@{/login}" class="text-blue-600 hover:underline">Log in</a> to interact with this club.
         </div>
-        <!-- End Join Club Button Logic -->
+        <!-- End Action Buttons -->
 
         <h2 class="text-2xl font-semibold text-gray-800 mb-3 mt-8">Club Members</h2>
         <div th:if="${movieClub.members != null and !movieClub.members.isEmpty()}" class="space-y-2 mb-8">

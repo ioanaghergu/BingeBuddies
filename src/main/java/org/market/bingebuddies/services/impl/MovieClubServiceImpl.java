@@ -168,4 +168,63 @@ public class MovieClubServiceImpl implements MovieClubService {
 
         return true;
     }
+
+    @Override
+    @Transactional
+    public MovieClubDTO updateMovieClub(Long clubId, MovieClubDTO movieClubDTO) {
+        Optional<MovieClub> clubOptional = movieClubRepository.findById(clubId);
+
+        if (clubOptional.isEmpty()) {
+            throw new MovieClubNotFoundException("Movie club with id " + clubId + " not found");
+        }
+
+        MovieClub existingClub = clubOptional.get();
+
+        if (!existingClub.getName().equals(movieClubDTO.getName())) {
+            Optional<MovieClub> conflictClub = movieClubRepository.findByNameAndAdminId(movieClubDTO.getName(), existingClub.getAdminId());
+            if (conflictClub.isPresent() && !conflictClub.get().getId().equals(clubId)) {
+                throw new ClubAlreadyExistsException("Another club with the name '" + movieClubDTO.getName() + "' already exists for this admin.");
+            }
+        }
+
+        existingClub.setName(movieClubDTO.getName());
+        existingClub.setDescription(movieClubDTO.getDescription());
+
+        ClubSettings existingSettings = existingClub.getSettings();
+        existingSettings.setIsPublic(movieClubDTO.getSettings().getIsPublic());
+        existingSettings.setMaxMembers(movieClubDTO.getSettings().getMaxMembers());
+        existingClub.setSettings(existingSettings);
+
+        MovieClub updatedClub = movieClubRepository.save(existingClub);
+
+        MovieClubDTO updatedDto = movieClubMapper.toMovieClubDTO(updatedClub);
+        return updatedDto;
+    }
+
+    @Override
+    @Transactional
+    public void deleteMovieClub(Long clubId, Long adminId) {
+        Optional<MovieClub> clubOptional = movieClubRepository.findById(clubId);
+
+        if (clubOptional.isEmpty()) {
+            throw new MovieClubNotFoundException("Movie club with id " + clubId + " not found");
+        }
+
+        MovieClub clubToDelete = clubOptional.get();
+
+        if (!clubToDelete.getAdminId().equals(adminId)) {
+            throw new PermissionDeniedException("Only the admin of the club can delete the club");
+        }
+
+        for (User member : clubToDelete.getMembers()) {
+            member.getClubs().remove(clubToDelete);
+            userRepository.save(member);
+        }
+
+        clubToDelete.getMembers().clear();
+        movieClubRepository.save(clubToDelete);
+
+        movieClubRepository.deleteById(clubId);
+        System.out.println("Successfully deleted club with ID: " + clubId);
+    }
 }

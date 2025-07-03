@@ -3,6 +3,7 @@ org\market\bingebuddies\domain\security\User$UserBuilder.class
 org\market\bingebuddies\domain\ScreeningEvent.class
 org\market\bingebuddies\repositories\MovieRepository.class
 org\market\bingebuddies\mappers\MovieClubMapper.class
+org\market\bingebuddies\exceptions\PermissionDeniedException.class
 org\market\bingebuddies\services\impl\MovieClubServiceImpl.class
 org\market\bingebuddies\repositories\security\AuthorityRepository.class
 org\market\bingebuddies\domain\Watchlist.class
