@@ -3,14 +3,17 @@ org\market\bingebuddies\domain\security\User$UserBuilder.class
 org\market\bingebuddies\domain\ScreeningEvent.class
 org\market\bingebuddies\repositories\MovieRepository.class
 org\market\bingebuddies\mappers\MovieClubMapper.class
+org\market\bingebuddies\services\MovieService.class
 org\market\bingebuddies\exceptions\PermissionDeniedException.class
 org\market\bingebuddies\services\impl\MovieClubServiceImpl.class
 org\market\bingebuddies\repositories\security\AuthorityRepository.class
 org\market\bingebuddies\mappers\MovieMapper.class
 org\market\bingebuddies\domain\Watchlist.class
 org\market\bingebuddies\dtos\UserDTO.class
+org\market\bingebuddies\exceptions\MovieAlreadyExistsException.class
 org\market\bingebuddies\exceptions\GlobalExceptionHandler.class
 org\market\bingebuddies\mappers\MovieClubMapperImpl.class
+org\market\bingebuddies\services\impl\MovieServiceImpl.class
 org\market\bingebuddies\domain\MovieClub.class
 org\market\bingebuddies\exceptions\UserAlreadyExists.class
 org\market\bingebuddies\dtos\MovieClubDTO$MovieClubDTOBuilder.class
@@ -29,6 +32,7 @@ org\market\bingebuddies\controllers\AuthController.class
 org\market\bingebuddies\exceptions\MovieClubNotFoundException.class
 org\market\bingebuddies\domain\ClubSettings.class
 org\market\bingebuddies\domain\Review.class
+org\market\bingebuddies\aspect\LoggingAspect.class
 org\market\bingebuddies\dtos\MovieDTO.class
 org\market\bingebuddies\domain\security\Authority.class
 org\market\bingebuddies\services\security\AuthorityService.class
