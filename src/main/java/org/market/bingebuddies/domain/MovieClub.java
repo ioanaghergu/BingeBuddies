@@ -1,6 +1,10 @@
 package org.market.bingebuddies.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.market.bingebuddies.domain.security.User;
 
@@ -20,15 +24,21 @@ public class MovieClub {
     @EqualsAndHashCode.Include
     private Long id;
 
+    //@NotNull(message = "A movie club must have an admin.")
     private Long adminId;
 
+    @NotBlank(message = "Club name required")
+    @Size(min = 3, max = 100, message = "Club name must be between 3 and 100 characters.")
     private String name;
 
+    @Size(max = 100, message = "Club description must not exceed 100 characters.")
     private String description;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "SETTINGS_ID", referencedColumnName = "ID")
     @EqualsAndHashCode.Exclude
+    @NotNull(message = "Club settings required.")
+    @Valid
     private ClubSettings settings;
 
     @Singular

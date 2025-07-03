@@ -99,47 +99,33 @@
 <div class="container">
     <h1>Welcome Back! 👋</h1>
 
-    <!-- Login Error Message -->
-    <!-- Displayed by Spring Security if login fails (e.g., bad credentials) -->
     <div th:if="${param.error}" class="alert alert-danger">
         Invalid username or password.
     </div>
 
-    <!-- Successful Logout Message -->
-    <!-- Displayed by Spring Security after a successful logout -->
     <div th:if="${param.logout}" class="alert alert-info">
         You have been logged out.
     </div>
 
-    <!-- Successful Registration Message -->
-    <!-- Displayed when redirected from the registration page with the '?created' parameter -->
     <div th:if="${param.created}" class="alert alert-success">
         Your account has been created successfully! Please log in.
     </div>
 
-    <!-- Login Form -->
-    <!-- Spring Security's default login processing URL is /login -->
     <form th:action="@{/perform_login}" method="post">
 
-        <!-- Username Input -->
-        <!-- The 'name' attribute must be 'username' for Spring Security to pick it up by default -->
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" id="username" name="username" class="form-control" required autofocus="autofocus">
         </div>
 
-        <!-- Password Input -->
-        <!-- The 'name' attribute must be 'password' for Spring Security to pick it up by default -->
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" id="password" name="password" class="form-control" required>
         </div>
 
-        <!-- Submit Button -->
         <button type="submit" class="btn">Login</button>
     </form>
 
-    <!-- Link to Registration Page -->
     <div class="register-link">
         <p>Don't have an account? <a th:href="@{/register}">Sign Up</a></p>
     </div>

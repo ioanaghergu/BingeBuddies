@@ -25,13 +25,13 @@ public class DataLoader implements CommandLineRunner {
 
             User admin = User.builder()
                     .username("admin")
-                    .password(passwordEncoder.encode("Admin1!"))
+                    .password(passwordEncoder.encode("Adminpassword1@"))
                     .authority(adminRole)
                     .build();
 
             User guest = User.builder()
                     .username("guest")
-                    .password(passwordEncoder.encode("Guest1!"))
+                    .password(passwordEncoder.encode("Guestpassword1@"))
                     .authority(guestRole)
                     .build();
 

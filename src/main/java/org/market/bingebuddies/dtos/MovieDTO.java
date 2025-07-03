@@ -1,5 +1,8 @@
 package org.market.bingebuddies.dtos;
 
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,10 +20,21 @@ import java.util.Set;
 @NoArgsConstructor
 public class MovieDTO {
     private Long id;
+
+    @NotBlank(message = "Movie title required.")
+    @Size(max = 255, message = "Title must not exceed 255 characters.")
     private String title;
+
+    @NotBlank(message = "Movie genre required.")
+    @Size(max = 255, message = "Genre must not exceed 255 characters.")
     private String genre;
-    private String ReleaseYear;
+
+    @NotNull(message = "Release year required.")
+    @Min(value = 2000, message = "Release year must be after 2000.")
+    @Max(value = 2030, message = "Release year can't be in the distant future")
+    private Integer releaseYear;
+
+    @Min(value = 0, message = "Movie rating can't be negative.")
+    @Max(value = 5, message = "Movie rating can't exceed 5 stars.")
     private Double avgRating;
-    private List<Review> reviews;
-    private Set<Watchlist> watchlists;
 }

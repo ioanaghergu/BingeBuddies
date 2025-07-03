@@ -8,6 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${movieClub.name} + ' Details'">Movie Club Details</title>
+    <!-- Using Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <style>
@@ -48,7 +49,7 @@
             </div>
         </div>
 
-
+        <!-- Join Club Button Logic -->
         <div sec:authorize="isAuthenticated()">
             <div th:if="${isMember}" class="text-green-600 font-semibold text-lg">
                 You are a member of this club!
@@ -56,6 +57,10 @@
             <div th:if="${#authentication.name == adminUsername}" class="text-blue-600 font-semibold text-lg">
                 You are the admin of this club.
             </div>
+            <!-- Show Join button ONLY if:
+                 1. Not already a member
+                 2. Not the admin
+                 3. Club is not full (check maxMembers and current members count) -->
             <div th:if="${!isMember and #authentication.name != adminUsername}">
                 <div th:if="${movieClub.settings != null and movieClub.settings.maxMembers != null and movieClub.members.size() >= movieClub.settings.maxMembers}" class="text-red-600 font-semibold text-lg">
                     This club is full.
@@ -71,11 +76,36 @@
         <div sec:authorize="!isAuthenticated()" class="text-gray-600">
             <a th:href="@{/login}" class="text-blue-600 hover:underline">Log in</a> to join this club.
         </div>
+        <!-- End Join Club Button Logic -->
 
         <h2 class="text-2xl font-semibold text-gray-800 mb-3 mt-8">Club Members</h2>
-        <div th:if="${movieClub.members != null and !movieClub.members.isEmpty()}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-            <div th:each="member : ${movieClub.members}" class="bg-gray-100 p-4 rounded-lg shadow-sm">
-                <p class="font-medium text-gray-800" th:text="${member.username}"></p>
+        <div th:if="${movieClub.members != null and !movieClub.members.isEmpty()}" class="space-y-2 mb-8">
+            <!-- Display Admin first -->
+            <div th:each="member : ${movieClub.members}"
+                 th:if="${member.id == movieClub.adminId}"
+                 class="bg-gray-100 p-3 rounded-lg shadow-sm flex justify-between items-center">
+                <p class="font-medium text-gray-800">
+                    <span th:text="${member.username}"></span> <span class="text-blue-600 font-semibold">(Admin)</span>
+                </p>
+            </div>
+
+            <!-- Display other members -->
+            <div th:each="member : ${movieClub.members}"
+                 th:if="${member.id != movieClub.adminId}"
+                 class="bg-gray-100 p-3 rounded-lg shadow-sm flex justify-between items-center">
+                <p class="font-medium text-gray-800">
+                    <span th:text="${member.username}"></span> <span class="text-gray-500">(Member)</span>
+                </p>
+                <!-- Remove button visible only to the club admin, and not for the admin themselves -->
+                <div sec:authorize="isAuthenticated()"
+                     th:if="${#authentication.name == adminUsername and member.id != movieClub.adminId}">
+                    <form th:action="@{/clubs/{clubId}/members/{memberId}/remove(clubId=${movieClub.id}, memberId=${member.id})}" method="post"
+                          onsubmit="return confirm('Are you sure you want to remove this member?');">
+                        <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-300">
+                            Remove
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
         <div th:if="${movieClub.members == null or movieClub.members.isEmpty()}" class="text-gray-600 mb-8">
@@ -87,7 +117,7 @@
             (Future screening events will be displayed here.)
         </div>
 
-        <a th:href="@{/}" class="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 mt-4">
+        <a th:href="@{/clubs}" class="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 mt-4">
             Back to Clubs
         </a>
     </div>
@@ -97,7 +127,7 @@
         <p class="text-gray-500">
             The movie club you are looking for does not exist or is not accessible.
         </p>
-        <a th:href="@{/}" class="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 mt-4">
+        <a th:href="@{/clubs}" class="inline-block bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300 mt-4">
             Back to Clubs
         </a>
     </div>

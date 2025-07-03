@@ -1,6 +1,9 @@
 package org.market.bingebuddies.domain.security;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.market.bingebuddies.domain.MovieClub;
 import org.market.bingebuddies.domain.Review;
@@ -22,7 +25,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
+
+    @NotBlank(message = "Username required.")
+    @Size(min = 3, max = 20, message = "Username must be between 3 and 20 characters.")
     private String username;
+
+    @NotBlank(message = "Password required.")
+    @Size(min = 8, message = "Password must contain at least 8 characters.")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,}$",
+            message = "Password must contain at least one uppercase letter, one lowercase letter, one digit and one special character (@$!%*?&)."
+    )
     private String password;
 
     @Singular
