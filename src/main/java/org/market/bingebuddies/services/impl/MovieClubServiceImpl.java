@@ -3,7 +3,6 @@ package org.market.bingebuddies.services.impl;
 import org.market.bingebuddies.domain.ClubSettings;
 import org.market.bingebuddies.domain.MovieClub;
 import org.market.bingebuddies.domain.security.User;
-import org.market.bingebuddies.dtos.ClubSettingsDTO;
 import org.market.bingebuddies.dtos.MovieClubDTO;
 import org.market.bingebuddies.exceptions.ClubAlreadyExistsException;
 import org.market.bingebuddies.exceptions.MovieClubNotFoundException;
@@ -54,14 +53,6 @@ public class MovieClubServiceImpl implements MovieClubService {
         return Optional.of(movieClubMapper.toMovieClubDTO(movieClub.get()));
     }
 
-    @Override
-    public MovieClub save(MovieClub movieClub) {
-        Optional<MovieClub> club = movieClubRepository.findByNameAndAdminId(movieClub.getName(), movieClub.getAdminId());
-        if(club.isPresent()) {
-            throw new ClubAlreadyExistsException("Club with name " + movieClub.getName() + " already exists");
-        }
-        return movieClubRepository.save(movieClub);
-    }
 
     @Override
     @Transactional
@@ -124,9 +115,7 @@ public class MovieClubServiceImpl implements MovieClubService {
 
         MovieClub savedClub = movieClubRepository.save(movieClub);
 
-        MovieClubDTO savedDTO = movieClubMapper.toMovieClubDTO(savedClub);
-
-        return savedDTO;
+        return movieClubMapper.toMovieClubDTO(savedClub);
 
     }
 

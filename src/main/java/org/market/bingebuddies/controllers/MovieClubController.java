@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Controller
 @RequestMapping({"/", "/clubs"})
@@ -37,7 +37,7 @@ public class MovieClubController {
     }
 
     @RequestMapping("")
-    public String homePage(Model model, Authentication authentication) {
+    public String homePage(Model model) {
         List<MovieClubDTO> movieClubs = movieClubService.getPublicMovieClubs();
         Map<MovieClubDTO, String> clubs = new HashMap<>();
 
@@ -92,7 +92,7 @@ public class MovieClubController {
     }
 
     @PostMapping("clubs/{id}/join")
-    public String joinClub(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal UserDetails currentUser, RedirectAttributes redirectAttributes) {
+    public String joinClub(@PathVariable("id") Long id, @AuthenticationPrincipal UserDetails currentUser, RedirectAttributes redirectAttributes) {
 
         if(currentUser == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "You must be logged in to join the club.");

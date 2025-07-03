@@ -10,7 +10,6 @@ public interface MovieClubService {
     List<MovieClubDTO> getPublicMovieClubs();
     Optional<MovieClubDTO> getMovieClubById(Long id);
     Boolean joinMovieClub(Long movieClubId, Long userId);
-    MovieClub save(MovieClub movieClub);
     MovieClubDTO createMovieClub(MovieClubDTO movieClubDTO, Long adminId);
     Boolean removeMemberFromClub(Long clubId, Long memberId, Long adminId);
     MovieClubDTO updateMovieClub(Long clubId, MovieClubDTO movieClubDTO);
