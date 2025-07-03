@@ -13,6 +13,8 @@ import org.market.bingebuddies.mappers.MovieClubMapper;
 import org.market.bingebuddies.repositories.MovieClubRepository;
 import org.market.bingebuddies.repositories.security.UserRepository;
 import org.market.bingebuddies.services.MovieClubService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,10 +38,12 @@ public class MovieClubServiceImpl implements MovieClubService {
     }
 
     @Override
-    public List<MovieClubDTO> getPublicMovieClubs() {
-        List<MovieClub> movieClubs = movieClubRepository.findAllBySettingsIsPublic(true);
-
-        return movieClubs.stream().map(movieClubMapper::toMovieClubDTO).collect(Collectors.toList());
+    public Page<MovieClubDTO> getPublicMovieClubs(Pageable pageable) {
+        Page<MovieClub> movieClubsPage = movieClubRepository.findAllBySettingsIsPublic(true, pageable);
+        return movieClubsPage.map(movieClub -> {
+            MovieClubDTO movieClubDTO = movieClubMapper.toMovieClubDTO(movieClub);
+            return movieClubDTO;
+        });
     }
 
     @Override

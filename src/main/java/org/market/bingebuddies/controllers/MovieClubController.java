@@ -9,6 +9,10 @@ import org.market.bingebuddies.exceptions.MovieClubNotFoundException;
 import org.market.bingebuddies.exceptions.PermissionDeniedException;
 import org.market.bingebuddies.services.MovieClubService;
 import org.market.bingebuddies.services.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,11 +41,12 @@ public class MovieClubController {
     }
 
     @RequestMapping("")
-    public String homePage(Model model) {
-        List<MovieClubDTO> movieClubs = movieClubService.getPublicMovieClubs();
+    public String homePage(Model model, @PageableDefault(size = 5, sort = "name", direction = Sort.Direction.ASC) Pageable pageable) {
+
+        Page<MovieClubDTO> movieClubsPage = movieClubService.getPublicMovieClubs(pageable);
         Map<MovieClubDTO, String> clubs = new HashMap<>();
 
-        for(MovieClubDTO movieClub : movieClubs) {
+        for(MovieClubDTO movieClub : movieClubsPage.getContent()) {
             String adminUsername = "N/A";
 
             if(movieClub.getAdminId() != null) {
@@ -51,6 +56,7 @@ public class MovieClubController {
             clubs.put(movieClub, adminUsername);
         }
         model.addAttribute("clubs", clubs);
+        model.addAttribute("movieClubsPage", movieClubsPage);
         return "home";
     }
 
