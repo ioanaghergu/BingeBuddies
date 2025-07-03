@@ -59,4 +59,13 @@ public class GlobalExceptionHandler {
 
         return mav;
     }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(MovieAlreadyExistsException.class)
+    public ModelAndView handleMovieAlreadyExistsException(Exception e) {
+        ModelAndView mav = new ModelAndView();
+        mav.getModel().put("exception", e);
+        mav.setViewName("MovieAlreadyExists");
+        return mav;
+    }
 }

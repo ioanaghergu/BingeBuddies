@@ -29,7 +29,7 @@ public class SecurityJPAConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        //.requestMatchers("/movies/new").hasRole("ADMIN")
+                        .requestMatchers("/movies/new").hasRole("ADMIN")
                         .requestMatchers(
                                 "/h2-console/**",
                                 "/webjars/**",

@@ -6,6 +6,7 @@ org\market\bingebuddies\mappers\MovieClubMapper.class
 org\market\bingebuddies\exceptions\PermissionDeniedException.class
 org\market\bingebuddies\services\impl\MovieClubServiceImpl.class
 org\market\bingebuddies\repositories\security\AuthorityRepository.class
+org\market\bingebuddies\mappers\MovieMapper.class
 org\market\bingebuddies\domain\Watchlist.class
 org\market\bingebuddies\dtos\UserDTO.class
 org\market\bingebuddies\exceptions\GlobalExceptionHandler.class
@@ -16,6 +17,7 @@ org\market\bingebuddies\dtos\MovieClubDTO$MovieClubDTOBuilder.class
 org\market\bingebuddies\exceptions\UserNotFoundException.class
 org\market\bingebuddies\dtos\ClubSettingsDTO.class
 org\market\bingebuddies\repositories\security\UserRepository.class
+org\market\bingebuddies\mappers\MovieMapperImpl.class
 org\market\bingebuddies\services\impl\AuthorityServiceImpl.class
 org\market\bingebuddies\repositories\MovieClubRepository.class
 org\market\bingebuddies\config\SecurityJPAConfig.class
@@ -31,6 +33,7 @@ org\market\bingebuddies\dtos\MovieDTO.class
 org\market\bingebuddies\domain\security\Authority.class
 org\market\bingebuddies\services\security\AuthorityService.class
 org\market\bingebuddies\mappers\ClubSettingsMapperImpl.class
+org\market\bingebuddies\controllers\MovieController.class
 org\market\bingebuddies\BingeBuddiesApplication.class
 org\market\bingebuddies\dtos\MovieClubDTO.class
 org\market\bingebuddies\services\UserService.class

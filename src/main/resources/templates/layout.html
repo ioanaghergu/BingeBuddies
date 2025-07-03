@@ -1,57 +1,55 @@
 <!DOCTYPE html>
-<!-- Add layout and security namespaces -->
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">Binge Buddies</title>
+    <title>BingeBuddies</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-<header class="bg-white shadow-md">
-    <nav class="container mx-auto px-6 py-3">
-        <div class="flex justify-between items-center">
-            <a th:href="@{/clubs}" class="text-2xl font-bold text-gray-800">BingeBuddies</a>
+<nav class="bg-gray-800 text-white p-4 shadow-md">
+    <div class="container mx-auto flex justify-between items-center">
+        <!-- Left Section: Logo -->
+        <a th:href="@{/}" class="text-2xl font-bold text-white hover:text-gray-300 transition-colors duration-300">BingeBuddies</a>
 
-            <div class="hidden md:flex items-center space-x-4">
-                <a th:href="@{/clubs}" class="text-gray-600 hover:text-blue-600">Clubs</a>
+        <!-- Center Section: Clubs and Movies -->
+        <div class="flex-grow flex justify-center items-center space-x-6">
+            <a th:href="@{/clubs}" class="text-white hover:text-gray-300 transition-colors duration-300 font-medium">Clubs</a>
+            <a th:href="@{/movies}" class="text-white hover:text-gray-300 transition-colors duration-300 font-medium">Movies</a>
+        </div>
 
-                <a th:href="@{/movies}" class="text-gray-600 hover:text-blue-600">Movies</a>
-
-                <a th:href="@{/movies/new}" sec:authorize="hasRole('ADMIN')"
-                   class="text-gray-600 hover:text-blue-600">Add Movie</a>
-            </div>
-
-            <div class="flex items-center">
-                <a th:href="@{/login}" sec:authorize="!isAuthenticated()"
-                   class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-300">
-                    Login
-                </a>
-
-                <div sec:authorize="isAuthenticated()" class="flex items-center">
-                    <span class="text-gray-700 mr-4">Welcome, <strong sec:authentication="name">User</strong></span>
-                    <form th:action="@{/logout}" method="post" class="inline">
-                        <button type="submit"
-                                class="bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
-                            Logout
-                        </button>
-                    </form>
+        <!-- Right Section: User Auth Links -->
+        <div class="flex items-center space-x-6">
+            <div sec:authorize="isAuthenticated()" class="relative group">
+                <span class="text-white cursor-pointer font-medium" sec:authentication="name"></span>
+                <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 invisible group-hover:visible">
+                    <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
                 </div>
             </div>
-        </div>
-    </nav>
-</header>
 
-<main>
+            <div sec:authorize="!isAuthenticated()">
+                <a th:href="@{/login}" class="text-white hover:text-gray-300 transition-colors duration-300 font-medium">Login</a>
+                <span class="mx-2 text-gray-400">|</span>
+                <a th:href="@{/register}" class="text-white hover:text-gray-300 transition-colors duration-300 font-medium">Register</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-grow">
     <div layout:fragment="content">
-        <p> </p>
     </div>
 </main>
+
 
 </body>
 </html>
