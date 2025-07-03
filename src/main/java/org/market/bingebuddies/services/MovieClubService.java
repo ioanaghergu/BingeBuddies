@@ -12,4 +12,5 @@ public interface MovieClubService {
     Boolean joinMovieClub(Long movieClubId, Long userId);
     MovieClub save(MovieClub movieClub);
     MovieClubDTO createMovieClub(MovieClubDTO movieClubDTO, Long adminId);
+    Boolean removeMemberFromClub(Long clubId, Long memberId, Long adminId);
 }

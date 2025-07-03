@@ -5,6 +5,8 @@ import org.market.bingebuddies.domain.security.User;
 import org.market.bingebuddies.dtos.ClubSettingsDTO;
 import org.market.bingebuddies.dtos.MovieClubDTO;
 import org.market.bingebuddies.exceptions.ClubAlreadyExistsException;
+import org.market.bingebuddies.exceptions.MovieClubNotFoundException;
+import org.market.bingebuddies.exceptions.PermissionDeniedException;
 import org.market.bingebuddies.services.MovieClubService;
 import org.market.bingebuddies.services.UserService;
 import org.springframework.security.core.Authentication;
@@ -159,5 +161,40 @@ public class MovieClubController {
             return "redirect:/clubs/new";
 
         }
+    }
+
+    @PostMapping("/clubs/{clubId}/remove/{memberId}")
+    public String removeMember(@PathVariable("clubId") Long clubId,
+                               @PathVariable("memberId") Long memberId,
+                               @AuthenticationPrincipal UserDetails currentUser,
+                               RedirectAttributes redirectAttributes) {
+        if(currentUser == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You must be logged in to create a club.");
+            return "redirect:/login";
+        }
+
+        User user = userService.findByUsername(currentUser.getUsername());
+
+        if(user == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Could not find your user account.");
+            return "redirect:/clubs/" + clubId;
+        }
+
+        try{
+            boolean succes = movieClubService.removeMemberFromClub(clubId, memberId, user.getId());
+
+            if(succes) {
+                redirectAttributes.addFlashAttribute("successMessage", "Successfully removed member!");
+            }
+            else {
+                redirectAttributes.addFlashAttribute("errorMessage", "Failed to remove member!");
+            }
+        } catch (MovieClubNotFoundException | PermissionDeniedException e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Failed to remove member: " + e.getMessage());
+        }catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error removing member: " + e.getMessage());
+        }
+
+        return "redirect:/clubs/" + clubId;
     }
 }

@@ -7,6 +7,8 @@ import org.market.bingebuddies.dtos.ClubSettingsDTO;
 import org.market.bingebuddies.dtos.MovieClubDTO;
 import org.market.bingebuddies.exceptions.ClubAlreadyExistsException;
 import org.market.bingebuddies.exceptions.MovieClubNotFoundException;
+import org.market.bingebuddies.exceptions.PermissionDeniedException;
+import org.market.bingebuddies.exceptions.UserNotFoundException;
 import org.market.bingebuddies.mappers.ClubSettingsMapper;
 import org.market.bingebuddies.mappers.MovieClubMapper;
 import org.market.bingebuddies.repositories.MovieClubRepository;
@@ -126,5 +128,44 @@ public class MovieClubServiceImpl implements MovieClubService {
 
         return savedDTO;
 
+    }
+
+    @Override
+    @Transactional
+    public Boolean removeMemberFromClub(Long clubId, Long memberId, Long adminId) {
+        Optional<MovieClub> clubOptional = movieClubRepository.findById(clubId);
+        Optional<User> userOptional = userRepository.findById(memberId);
+
+        if(clubOptional.isEmpty())
+        {
+            throw new MovieClubNotFoundException("Club with id " + clubId + " not found");
+        }
+
+        if(userOptional.isEmpty())
+        {
+            throw new UserNotFoundException("User with id" + memberId + " not found");
+        }
+
+        MovieClub movieClub = clubOptional.get();
+        User user = userOptional.get();
+
+        if(!movieClub.getAdminId().equals(adminId)) {
+            throw new PermissionDeniedException("Only the admin of the club can remove members");
+        }
+
+        Boolean memberRemoved = movieClub.getMembers().remove(user);
+
+        if(!memberRemoved)
+        {
+            System.out.println("Member not found in this club");
+            return false;
+        }
+
+        boolean clubRemoved = user.getClubs().remove(movieClub);
+
+        movieClubRepository.save(movieClub);
+        userRepository.save(user);
+
+        return true;
     }
 }

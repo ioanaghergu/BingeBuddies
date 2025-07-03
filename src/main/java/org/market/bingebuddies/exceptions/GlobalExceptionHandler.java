@@ -49,4 +49,14 @@ public class GlobalExceptionHandler {
 
         return mav;
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ExceptionHandler(PermissionDeniedException.class)
+    public ModelAndView handlePermissionDeniedException(Exception e) {
+        ModelAndView mav = new ModelAndView();
+        mav.getModel().put("exception", e);
+        mav.setViewName("PermissionDenied");
+
+        return mav;
+    }
 }

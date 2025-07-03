@@ -99,7 +99,7 @@
                 <!-- Remove button visible only to the club admin, and not for the admin themselves -->
                 <div sec:authorize="isAuthenticated()"
                      th:if="${#authentication.name == adminUsername and member.id != movieClub.adminId}">
-                    <form th:action="@{/clubs/{clubId}/members/{memberId}/remove(clubId=${movieClub.id}, memberId=${member.id})}" method="post"
+                    <form th:action="@{/clubs/{clubId}/remove/{memberId}(clubId=${movieClub.id}, memberId=${member.id})}" method="post"
                           onsubmit="return confirm('Are you sure you want to remove this member?');">
                         <button type="submit" class="bg-red-500 text-white text-sm px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-300">
                             Remove
