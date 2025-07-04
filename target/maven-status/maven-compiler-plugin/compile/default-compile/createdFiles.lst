@@ -14,16 +14,17 @@ org\market\bingebuddies\services\impl\MovieClubServiceImpl.class
 org\market\bingebuddies\repositories\ScreeningEventRepository.class
 org\market\bingebuddies\repositories\security\AuthorityRepository.class
 org\market\bingebuddies\mappers\MovieMapper.class
-org\market\bingebuddies\exceptions\EventNotFoundException.class
 org\market\bingebuddies\domain\Watchlist.class
 org\market\bingebuddies\dtos\UserDTO.class
 org\market\bingebuddies\exceptions\MovieAlreadyExistsException.class
 org\market\bingebuddies\exceptions\GlobalExceptionHandler.class
 org\market\bingebuddies\mappers\MovieClubMapperImpl.class
 org\market\bingebuddies\services\impl\MovieServiceImpl.class
+org\market\bingebuddies\dtos\ReviewDTO$ReviewDTOBuilder.class
 org\market\bingebuddies\domain\MovieClub.class
 org\market\bingebuddies\exceptions\UserAlreadyExists.class
 org\market\bingebuddies\dtos\MovieClubDTO$MovieClubDTOBuilder.class
+org\market\bingebuddies\domain\Movie$MovieBuilder.class
 org\market\bingebuddies\exceptions\UserNotFoundException.class
 org\market\bingebuddies\dtos\ClubSettingsDTO.class
 org\market\bingebuddies\repositories\security\UserRepository.class
@@ -65,6 +66,5 @@ org\market\bingebuddies\dtos\UserDTO$UserDTOBuilder.class
 org\market\bingebuddies\dtos\MovieDTO$MovieDTOBuilder.class
 org\market\bingebuddies\mappers\UserMapper.class
 org\market\bingebuddies\services\security\JPAUserDetailsService.class
-org\market\bingebuddies\controllers\MovieClubController.class
 org\market\bingebuddies\mappers\ClubSettingsMapper.class
 org\market\bingebuddies\exceptions\MovieNotFoundException.class

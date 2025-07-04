@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MovieService {
+    Optional<MovieDTO> getMovieById(Long id);
     List<MovieDTO> getAllMovies();
     Optional<MovieDTO> findMovieById(Long id);
     MovieDTO addMovie(MovieDTO movieDTO);

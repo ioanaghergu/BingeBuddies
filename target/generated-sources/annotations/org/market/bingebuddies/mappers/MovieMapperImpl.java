@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-04T16:14:23+0300",
+    date = "2025-07-04T21:19:14+0300",
     comments = "version: 1.6.0.Beta1, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -23,16 +23,16 @@ public class MovieMapperImpl implements MovieMapper {
             return null;
         }
 
-        Movie movie = new Movie();
+        Movie.MovieBuilder movie = Movie.builder();
 
-        movie.setId( movieDTO.getId() );
-        movie.setTitle( movieDTO.getTitle() );
-        movie.setGenre( movieDTO.getGenre() );
-        movie.setReleaseYear( movieDTO.getReleaseYear() );
-        movie.setAvgRating( movieDTO.getAvgRating() );
-        movie.setReviews( reviewDTOListToReviewList( movieDTO.getReviews() ) );
+        movie.id( movieDTO.getId() );
+        movie.title( movieDTO.getTitle() );
+        movie.genre( movieDTO.getGenre() );
+        movie.releaseYear( movieDTO.getReleaseYear() );
+        movie.avgRating( movieDTO.getAvgRating() );
+        movie.reviews( reviewDTOListToReviewList( movieDTO.getReviews() ) );
 
-        return movie;
+        return movie.build();
     }
 
     @Override
@@ -85,13 +85,13 @@ public class MovieMapperImpl implements MovieMapper {
             return null;
         }
 
-        ReviewDTO reviewDTO = new ReviewDTO();
+        ReviewDTO.ReviewDTOBuilder reviewDTO = ReviewDTO.builder();
 
-        reviewDTO.setId( review.getId() );
-        reviewDTO.setRating( review.getRating() );
-        reviewDTO.setComment( review.getComment() );
+        reviewDTO.id( review.getId() );
+        reviewDTO.rating( review.getRating() );
+        reviewDTO.comment( review.getComment() );
 
-        return reviewDTO;
+        return reviewDTO.build();
     }
 
     protected List<ReviewDTO> reviewListToReviewDTOList(List<Review> list) {

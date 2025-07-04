@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-07-04T16:14:23+0300",
+    date = "2025-07-04T21:19:14+0300",
     comments = "version: 1.6.0.Beta1, compiler: javac, environment: Java 21.0.6 (Oracle Corporation)"
 )
 @Component
@@ -36,16 +36,16 @@ public class ReviewMapperImpl implements ReviewMapper {
             return null;
         }
 
-        ReviewDTO reviewDTO = new ReviewDTO();
+        ReviewDTO.ReviewDTOBuilder reviewDTO = ReviewDTO.builder();
 
-        reviewDTO.setUserId( reviewUserId( review ) );
-        reviewDTO.setUsername( reviewUserUsername( review ) );
-        reviewDTO.setMovieId( reviewMovieId( review ) );
-        reviewDTO.setId( review.getId() );
-        reviewDTO.setRating( review.getRating() );
-        reviewDTO.setComment( review.getComment() );
+        reviewDTO.userId( reviewUserId( review ) );
+        reviewDTO.username( reviewUserUsername( review ) );
+        reviewDTO.movieId( reviewMovieId( review ) );
+        reviewDTO.id( review.getId() );
+        reviewDTO.rating( review.getRating() );
+        reviewDTO.comment( review.getComment() );
 
-        return reviewDTO;
+        return reviewDTO.build();
     }
 
     private Long reviewUserId(Review review) {

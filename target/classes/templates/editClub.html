@@ -7,7 +7,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="${movieClub.name} + ' - Edit Club'">Edit Movie Club</title>
-    <!-- Using Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <style>
@@ -22,14 +21,11 @@
 
     <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
         <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center" th:text="'Edit ' + ${movieClub.name}">Edit Movie Club</h1>
-
-        <!-- Flash messages for success/error -->
         <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
             <span class="block sm:inline" th:text="${errorMessage}"></span>
         </div>
 
         <form th:action="@{/clubs/{id}/edit(id=${movieClub.id})}" th:object="${movieClub}" method="post" class="space-y-6">
-            <!-- Hidden ID field to ensure the correct club is updated -->
             <input type="hidden" th:field="*{id}" />
 
             <div>
@@ -58,7 +54,7 @@
                 </div>
 
                 <div>
-                    <label for="maxMembers" class="block text-gray-700 text-sm font-semibold mb-2">Maximum Members (leave empty for no limit)</label>
+                    <label for="maxMembers" class="block text-gray-700 text-sm font-semibold mb-2">Maximum Members</label>
                     <input type="number" id="maxMembers" th:field="*{settings.maxMembers}"
                            class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                            placeholder="e.g., 50">

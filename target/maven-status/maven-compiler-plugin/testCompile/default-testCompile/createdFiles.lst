@@ -1,1 +1,6 @@
+org\market\bingebuddies\unitTests\EventServiceTests.class
 org\market\bingebuddies\BingeBuddiesApplicationTests.class
+org\market\bingebuddies\integrationTests\MovieControllerTests.class
+org\market\bingebuddies\unitTests\MovieClubServiceTests.class
+org\market\bingebuddies\unitTests\MovieServiceTests.class
+org\market\bingebuddies\unitTests\ReviewServiceTests.class

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: org.market.bingebuddies.unitTests.MovieServiceTests
+-------------------------------------------------------------------------------
+Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.184 s -- in org.market.bingebuddies.unitTests.MovieServiceTests

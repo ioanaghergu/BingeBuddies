@@ -37,6 +37,14 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
+    public Optional<MovieDTO> getMovieById(Long id) {
+        Optional<Movie> movie = movieRepository.findById(id);
+
+        return movie.map(movieMapper::toMovieDTO);
+    }
+
+
+    @Override
     @Transactional
     public MovieDTO addMovie(MovieDTO movieDTO) {
         Optional<Movie> movie = movieRepository.findByTitleAndAndReleaseYear(movieDTO.getTitle(), movieDTO.getReleaseYear());
@@ -46,8 +54,8 @@ public class MovieServiceImpl implements MovieService {
         }
 
         Movie newMovie = movieMapper.toMovie(movieDTO);
-        movieRepository.save(newMovie);
-        return movieMapper.toMovieDTO(newMovie);
+        Movie savedMovie = movieRepository.save(newMovie);
+        return movieMapper.toMovieDTO(savedMovie);
 
     }
 

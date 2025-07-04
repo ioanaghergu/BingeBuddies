@@ -7,12 +7,14 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.market.bingebuddies.domain.Movie;
 import org.market.bingebuddies.domain.security.User;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReviewDTO {
