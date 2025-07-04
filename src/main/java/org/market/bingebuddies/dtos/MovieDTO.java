@@ -1,18 +1,14 @@
 package org.market.bingebuddies.dtos;
 
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.market.bingebuddies.domain.Review;
-import org.market.bingebuddies.domain.Watchlist;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @Data
 @Builder
@@ -37,4 +33,6 @@ public class MovieDTO {
     @Min(value = 0, message = "Movie rating can't be negative.")
     @Max(value = 5, message = "Movie rating can't exceed 5 stars.")
     private Double avgRating;
+
+    private List<ReviewDTO> reviews;
 }

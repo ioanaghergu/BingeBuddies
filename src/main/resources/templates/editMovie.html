@@ -6,7 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Movie</title>
+    <title th:text="'Edit ' + ${movie.title}">Edit Movie</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <style>
@@ -20,13 +20,13 @@
 <div layout:fragment="content" class="container mx-auto px-4 py-8">
 
     <div class="max-w-xl mx-auto bg-white rounded-xl shadow-lg p-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Add New Movie</h1>
-
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center" th:text="'Edit ' + ${movie.title}">Edit Movie</h1>
         <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
             <span class="block sm:inline" th:text="${errorMessage}"></span>
         </div>
 
-        <form th:action="@{/movies/new}" th:object="${movie}" method="post" class="space-y-6">
+        <form th:action="@{/movies/edit/{id}(id=${movie.id})}" th:object="${movie}" method="post" class="space-y-6">
+            <input type="hidden" th:field="*{id}" />
             <div>
                 <label for="title" class="block text-gray-700 text-sm font-semibold mb-2">Movie Title</label>
                 <input type="text" id="title" th:field="*{title}"
@@ -34,7 +34,6 @@
                        placeholder="e.g., The Matrix" required>
                 <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-red-500 mt-1"></p>
             </div>
-
             <div>
                 <label for="genre" class="block text-gray-700 text-sm font-semibold mb-2">Genre</label>
                 <input type="text" id="genre" th:field="*{genre}"
@@ -42,21 +41,19 @@
                        placeholder="e.g., Sci-Fi, Action" required>
                 <p th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}" class="text-red-500 mt-1"></p>
             </div>
-
             <div>
                 <label for="releaseYear" class="block text-gray-700 text-sm font-semibold mb-2">Release Year</label>
-                <input type="text" id="releaseYear" th:field="*{releaseYear}"
+                <input type="number" id="releaseYear" th:field="*{releaseYear}"
                        class="shadow-sm appearance-none border rounded-lg w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                       placeholder="e.g., 1999" required pattern="^\d{4}$" title="Please enter a 4-digit year">
+                       placeholder="e.g., 2000" required>
                 <p th:if="${#fields.hasErrors('releaseYear')}" th:errors="*{releaseYear}" class="text-red-500 mt-1"></p>
             </div>
-
             <div class="flex justify-end space-x-4 mt-6">
-                <a th:href="@{/movies}" class="inline-block bg-gray-300 text-gray-800 font-semibold px-6 py-3 rounded-lg hover:bg-gray-400 transition-colors duration-300">
+                <a th:href="@{/movies/{id}(id=${movie.id})}" class="inline-block bg-gray-300 text-gray-800 font-semibold px-6 py-3 rounded-lg hover:bg-gray-400 transition-colors duration-300">
                     Cancel
                 </a>
                 <button type="submit" class="bg-blue-600 text-white font-semibold px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-300">
-                    Add Movie
+                    Save Changes
                 </button>
             </div>
         </form>

@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 @Service
-@Profile("mysql")
+//@Profile("mysql")
 public class JPAUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
 

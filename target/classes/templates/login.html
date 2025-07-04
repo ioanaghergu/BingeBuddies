@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <!-- Reusing the same styles as the register page for a consistent look and feel -->
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -41,7 +40,7 @@
             padding: 0.75rem;
             border: 1px solid #dddfe2;
             border-radius: 6px;
-            box-sizing: border-box; /* Important for padding */
+            box-sizing: border-box;
         }
         .btn {
             width: 100%;
@@ -58,7 +57,7 @@
         .btn:hover {
             background-color: #166fe5;
         }
-        /* Alert styles for different message types */
+
         .alert {
             padding: 15px;
             border-radius: 4px;
@@ -97,7 +96,7 @@
 <body>
 
 <div class="container">
-    <h1>Welcome Back! 👋</h1>
+    <h1>Welcome Back!</h1>
 
     <div th:if="${param.error}" class="alert alert-danger">
         Invalid username or password.

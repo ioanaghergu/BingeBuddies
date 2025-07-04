@@ -18,22 +18,22 @@
 
 <nav class="bg-gray-800 text-white p-4 shadow-md">
     <div class="container mx-auto flex justify-between items-center">
-        <!-- Left Section: Logo -->
         <a th:href="@{/}" class="text-2xl font-bold text-white hover:text-gray-300 transition-colors duration-300">BingeBuddies</a>
 
-        <!-- Center Section: Clubs and Movies -->
         <div class="flex-grow flex justify-center items-center space-x-6">
             <a th:href="@{/clubs}" class="text-white hover:text-gray-300 transition-colors duration-300 font-medium">Clubs</a>
             <a th:href="@{/movies}" class="text-white hover:text-gray-300 transition-colors duration-300 font-medium">Movies</a>
         </div>
 
-        <!-- Right Section: User Auth Links -->
         <div class="flex items-center space-x-6">
             <div sec:authorize="isAuthenticated()" class="relative group">
-                <span class="text-white cursor-pointer font-medium" sec:authentication="name"></span>
-                <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 invisible group-hover:visible">
-                    <a th:href="@{/logout}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</a>
-                </div>
+                <span class="text-white-700 mr-4">Welcome, <strong sec:authentication="name">User</strong></span>
+                <form th:action="@{/logout}" method="post" class="inline">
+                    <button type="submit"
+                            class="bg-red-500 text-white font-semibold px-4 py-2 rounded-lg hover:bg-red-600 transition-colors duration-300">
+                        Logout
+                    </button>
+                </form>
             </div>
 
             <div sec:authorize="!isAuthenticated()">

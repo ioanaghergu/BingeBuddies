@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface MovieRepository extends PagingAndSortingRepository<Movie, Long>, JpaRepository<Movie, Long> {
     Optional<Movie> findByTitleAndAndReleaseYear(String title, Integer releaseYear);
+    Optional<Movie> findByTitleAndAndReleaseYearAndGenre(String title, Integer releaseYear, String genre);
 }

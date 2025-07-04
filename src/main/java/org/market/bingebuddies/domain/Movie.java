@@ -2,9 +2,7 @@ package org.market.bingebuddies.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.List;
@@ -14,10 +12,12 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
     @NotBlank(message = "Movie title required.")
@@ -37,10 +37,19 @@ public class Movie {
     @Max(value = 5, message = "Movie rating can't exceed 5 stars.")
     private Double avgRating;
 
-    @OneToMany(mappedBy = "movie")
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Review> reviews;
 
     @ManyToMany(mappedBy = "movies")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private Set<Watchlist> watchlists = new HashSet<>();
+
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private List<ScreeningEvent> screeningEvents;
 
 }

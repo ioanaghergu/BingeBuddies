@@ -1,6 +1,7 @@
-package org.market.bingebuddies.domain;
+package org.market.bingebuddies.dtos;
 
-import jakarta.persistence.*;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -8,17 +9,13 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import org.market.bingebuddies.domain.Movie;
 import org.market.bingebuddies.domain.security.User;
 
-@Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Review {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ReviewDTO {
     private Long id;
 
     @NotNull(message = "Rating value required.")
@@ -29,16 +26,7 @@ public class Review {
     @Size(max = 100, message = "A comment can't exceed 100 characters.")
     private String comment;
 
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "USER_ID")
-    @NotNull
-    @ToString.Exclude
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "MOVIE_ID")
-    @NotNull
-    @ToString.Exclude
-    private Movie movie;
+    private Long userId;
+    private Long movieId;
+    private String username;
 }

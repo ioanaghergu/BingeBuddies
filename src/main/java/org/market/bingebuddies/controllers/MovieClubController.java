@@ -4,16 +4,19 @@ import jakarta.validation.Valid;
 import org.market.bingebuddies.domain.security.User;
 import org.market.bingebuddies.dtos.ClubSettingsDTO;
 import org.market.bingebuddies.dtos.MovieClubDTO;
+import org.market.bingebuddies.dtos.ScreeningEventDTO;
 import org.market.bingebuddies.exceptions.ClubAlreadyExistsException;
 import org.market.bingebuddies.exceptions.MovieClubNotFoundException;
+import org.market.bingebuddies.exceptions.MovieNotFoundException;
 import org.market.bingebuddies.exceptions.PermissionDeniedException;
 import org.market.bingebuddies.services.MovieClubService;
+import org.market.bingebuddies.services.MovieService;
+import org.market.bingebuddies.services.ScreeningEventService;
 import org.market.bingebuddies.services.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -34,10 +37,14 @@ public class MovieClubController {
 
     private final MovieClubService movieClubService;
     private final UserService userService;
+    private final ScreeningEventService screeningEventService;
+    private final MovieService movieService;
 
-    public MovieClubController(MovieClubService movieClubService, UserService userService) {
+    public MovieClubController(MovieClubService movieClubService, UserService userService, ScreeningEventService screeningEventService, MovieService movieService) {
         this.movieClubService = movieClubService;
         this.userService = userService;
+        this.screeningEventService = screeningEventService;
+        this.movieService = movieService;
     }
 
     @RequestMapping("")
@@ -90,6 +97,13 @@ public class MovieClubController {
             }
 
             model.addAttribute("isMember", isMember);
+
+            if(isMember) {
+                model.addAttribute("newEvent", new ScreeningEventDTO());
+                model.addAttribute("movies", movieService.getAllMovies());
+            }
+
+            model.addAttribute("upcomingEvents", screeningEventService.getUpcomingScreeningEventsForClub(id));
             return "clubDetails";
         }
         else {
@@ -306,15 +320,58 @@ public class MovieClubController {
             movieClubService.deleteMovieClub(id, user.getId());
             redirectAttributes.addFlashAttribute("successMessage", "Club deleted successfully!");
             return "redirect:/clubs";
-        } catch (MovieClubNotFoundException e) {
-            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-            return "redirect:/clubs";
-        } catch (SecurityException e) {
+        } catch (MovieClubNotFoundException | SecurityException e) {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
             return "redirect:/clubs";
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "An unexpected error occurred: " + e.getMessage());
             return "redirect:/clubs";
         }
+    }
+
+    @PostMapping("/clubs/{clubId}/events/new")
+    public String addEvent(@PathVariable Long clubId,
+                           @Valid @ModelAttribute("newEvent") ScreeningEventDTO screeningEventDTO,
+                           @AuthenticationPrincipal UserDetails currentUser,
+                           RedirectAttributes redirectAttributes,
+                           BindingResult bindingResult) {
+        if (currentUser == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You must be logged in to edit a club.");
+            return "redirect:/login";
+        }
+
+        User user = userService.findByUsername(currentUser.getUsername());
+        if (user == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Could not find your user account.");
+            return "redirect:/clubs/" + clubId;
+        }
+
+        Optional<MovieClubDTO> clubDTO = movieClubService.getMovieClubById(clubId);
+
+        if(clubDTO.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Could not find your club.");
+            return "redirect:/clubs";
+        }
+
+        if(!clubDTO.get().getMembers().stream().anyMatch(m -> user.getId().equals(m.getId()))) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not a member of this club.");
+            return "redirect:/clubs/" + clubId;
+        }
+
+        screeningEventDTO.setMovieClubId(clubId);
+
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Please correct the event details");
+            return "redirect:/clubs/" + clubId;
+        }
+
+        try {
+            screeningEventService.addScreeningEvent(clubId, screeningEventDTO);
+            redirectAttributes.addFlashAttribute("successMessage", "Event added successfully!");
+        }catch (MovieClubNotFoundException | MovieNotFoundException e){
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+        }
+
+        return "redirect:/clubs/" + clubId;
     }
 }

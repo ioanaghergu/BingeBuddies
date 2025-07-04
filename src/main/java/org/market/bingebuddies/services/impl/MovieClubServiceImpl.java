@@ -69,12 +69,10 @@ public class MovieClubServiceImpl implements MovieClubService {
             MovieClub club = clubOptional.get();
             User user = userOptional.get();
 
-            //User is already a member of the club
             if(club.getMembers().contains(user)) {
                 return false;
             }
 
-            //Club is full
             if(club.getSettings() != null && club.getSettings().getMaxMembers() != null) {
                 if(club.getMembers().size() == club.getSettings().getMaxMembers()) {
                     return false;
@@ -173,7 +171,7 @@ public class MovieClubServiceImpl implements MovieClubService {
 
         MovieClub existingClub = clubOptional.get();
 
-        if (!existingClub.getName().equals(movieClubDTO.getName())) {
+        if (existingClub.getName().equals(movieClubDTO.getName())) {
             Optional<MovieClub> conflictClub = movieClubRepository.findByNameAndAdminId(movieClubDTO.getName(), existingClub.getAdminId());
             if (conflictClub.isPresent() && !conflictClub.get().getId().equals(clubId)) {
                 throw new ClubAlreadyExistsException("Another club with the name '" + movieClubDTO.getName() + "' already exists for this admin.");

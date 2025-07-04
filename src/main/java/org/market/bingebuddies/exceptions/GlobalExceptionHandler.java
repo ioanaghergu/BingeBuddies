@@ -68,4 +68,32 @@ public class GlobalExceptionHandler {
         mav.setViewName("MovieAlreadyExists");
         return mav;
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MovieNotFoundException.class)
+    public ModelAndView handleMovieNotFoundException(Exception e) {
+        ModelAndView mav = new ModelAndView();
+        mav.getModel().put("exception", e);
+        mav.setViewName("MovieNotFound");
+        return mav;
+    }
+
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(ReviewAlreadyExistsException.class)
+    public ModelAndView handleReviewAlreadyExistsException(Exception e) {
+        ModelAndView mav = new ModelAndView();
+        mav.getModel().put("exception", e);
+        mav.setViewName("ReviewAlreadyExists");
+        return mav;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ReviewNotFoundException.class)
+    public ModelAndView handleReviewNotFoundException(Exception e) {
+        ModelAndView mav = new ModelAndView();
+        mav.getModel().put("exception", e);
+        mav.setViewName("ReviewNotFound");
+        return mav;
+    }
+
 }

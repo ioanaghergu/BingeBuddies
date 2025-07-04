@@ -52,7 +52,6 @@
             </div>
         </div>
 
-        <!-- Pagination Controls -->
         <nav class="flex justify-center items-center space-x-2 mt-8">
             <a th:if="${movieClubsPage.hasPrevious()}"
                th:href="@{/clubs(page=${movieClubsPage.number - 1}, size=${movieClubsPage.size}, sort=${movieClubsPage.sort.toString().replace(': ', ',')})}"
@@ -74,7 +73,7 @@
                 Next
             </a>
         </nav>
-        <!-- End Pagination Controls -->
+
 
     </div>
 

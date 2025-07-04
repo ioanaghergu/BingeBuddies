@@ -3,10 +3,17 @@ package org.market.bingebuddies.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ScreeningEvent {
 
     @Id
@@ -20,10 +27,12 @@ public class ScreeningEvent {
     @ManyToOne
     @JoinColumn(name = "CLUB_ID")
     @NotNull(message = "A screening event can only be created inside a movie club.")
+    @ToString.Exclude
     private MovieClub movieClub;
 
     @ManyToOne
     @JoinColumn(name = "MOVIE_ID")
     @NotNull(message = "A movie must be selected for the screening event.")
+    @ToString.Exclude
     private Movie movie;
 }
